@@ -21,7 +21,7 @@ server <- function(input, output) {
   observeEvent(input$getNamesButton, {
     # pic_filepath = input$picInput$datapath
     
-    pic_filepath = "C:/Users/xbox/Pictures/closer.JPG"
+    pic_filepath = "www/closer.JPG"
     
     print(pic_filepath)
     
@@ -36,18 +36,38 @@ server <- function(input, output) {
       str_replace_all(pattern = "'", replacement = "")
     
     win_rates = c()
+    ratings_2v2 = c()
+    ratings_3v3 = c()
+    ratings_rbg = c()
+    
     for(i in 1:length(all_names)){
      win_rate = GetCharacterWinrate(all_names[i], all_realms[i])
      
+     rating_2v2 = GetCharacterRatings(charactername = all_names[i], server = all_realms[i], bracket = "2v2")
+     rating_3v3 = GetCharacterRatings(charactername = all_names[i], server = all_realms[i], bracket = "3v3")
+     rating_rbg = GetCharacterRatings(charactername = all_names[i], server = all_realms[i], bracket = "rbg")
+     
      win_rates = c(win_rates, win_rate)
+     
+     ratings_2v2 = c(ratings_2v2, rating_2v2)
+     ratings_3v3 = c(ratings_3v3, rating_3v3)
+     ratings_rbg = c(ratings_rbg, rating_rbg)
+     
      
      print(paste0(i, ", completed out of: ", length(all_names)))
     }
     
+    print(paste0("2s Ratings ", ratings_2v2))
+    print(paste0("3s Ratings ", ratings_3v3))
+    print(paste0("RBG Ratings ", ratings_rbg))
+    
     df_display = data.frame(
       "Character Name" = all_names,
       "Character Realm" = all_realms,
-      "Win Rate" = win_rates
+      "Win Rate" = win_rates,
+      "2v2 Rating" = ratings_2v2,
+      "3v3 Rating" = ratings_3v3,
+      "RBG Rating" = ratings_rbg
     )
     
     output$winRateTable = renderDataTable({

@@ -196,5 +196,27 @@ GetCharacterWinrate <- function(charactername, server) {
 ######################################
 ######################################
 
+# /profile/wow/character/{realmSlug}/{characterName}/pvp-bracket/{pvpBracket}
+
+GetCharacterRatings <- function(charactername, server, bracket) {
+  #server = 'tichondrius'
+  #charactername = 'yach'
+  #bracket = '2v2'
+  
+  url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/", server,"/",charactername, "/pvp-bracket/", bracket, "?namespace=profile-us&locale=en_US&access_token=",access_token))
+  
+  
+  response = GET(url)
+  
+  if(response$status_code != 200){
+    return(NA)
+  }
+  
+  x = fromJSON(rawToChar(response$content))
+  
+  rating = x$rating
+  
+  return(rating)
+}
 
 
