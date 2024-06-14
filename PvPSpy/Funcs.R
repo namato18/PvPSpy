@@ -9,7 +9,6 @@ access_token = system("curl -u 6ab02cc1a1c140f0bd213d0b27e8c74c:VTrUzsJw0XDmKfJv
 access_token = jsonlite::fromJSON(access_token[4], flatten = TRUE)
 access_token = access_token$access_token
 
-
 api_key <- Sys.setenv(GEMINI_API_KEY = "AIzaSyCFCKa8CM0c_khCk8qBtGZWInPO2pFvKak")
 gemini <- function(prompt, 
                    temperature=0.5,
@@ -219,4 +218,35 @@ GetCharacterRatings <- function(charactername, server, bracket) {
   return(rating)
 }
 
+######################################
+######################################
+######################################
+######################################
 
+# /data/wow/pvp-season/{pvpSeasonId}/pvp-leaderboard/index
+
+GetLeaderboardIndex <- function(charactername, server, bracket) {
+  #server = 'tichondrius'
+  #charactername = 'yach'
+  #bracket = '2v2'
+  
+  url = URLencode(paste0("https://us.api.blizzard.com/data/wow/pvp-season/", season_id,"/pvp-leaderboard/index?namespace=dynamic-us&locale=en_US&access_token=",access_token))
+  
+  
+  response = GET(url)
+  
+  if(response$status_code != 200){
+    return(NA)
+  }
+  
+  x = fromJSON(rawToChar(response$content))
+  
+  rating = x$rating
+  
+  return(rating)
+}
+
+######################################
+######################################
+######################################
+######################################
